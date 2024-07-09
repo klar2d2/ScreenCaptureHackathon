@@ -25,7 +25,7 @@ const ImageUpload = () => {
       <input type="file" accept="image/*" onChange={handleImageChange} />
       {selectedImage && (
         <div>
-          <img src={selectedImage} alt="Selected" />
+          <img src={selectedImage} alt="Selected" style={{ width: '300px', height: '300px', objectFit: 'cover' }} />
           <button onClick={handleUpload}>Upload</button>
         </div>
       )}

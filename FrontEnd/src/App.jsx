@@ -1,6 +1,6 @@
 import logo from './logo.svg';
-import ImageUpload from './ImageUpload';
 import './App.css';
+import ImageUpload from './ImageUpload.jsx';
 
 function App() {
   return (
