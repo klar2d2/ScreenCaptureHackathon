@@ -14,9 +14,23 @@ const ImageUpload = () => {
     }
   };
 
-  const handleUpload = () => {
-    // Implement your upload logic here
-    console.log("Image uploaded:", selectedImage);
+  const handleUpload = async (event) => {
+    event.preventDefault();
+    if (!file) return;
+ 
+    const formData = new FormData();
+    formData.append('image', file);
+ 
+    try {
+      const response = await fetch('/upload', {
+        method: 'POST',
+        body: formData,
+      });
+      const result = await response.json();
+      console.log(result);
+    } catch (error) {
+      console.error('Error uploading image:', error);
+    }
   };
 
   return (
