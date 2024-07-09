@@ -45,6 +45,5 @@ async function analyzeImage(imageUrl) {
   }
 }
 
-const imageUrl =
-  "https://image.slidesharecdn.com/electronichealthrecords-140507154817-phpapp01/75/Electronic-health-records-4-2048.jpg";
+const imageUrl = "https://i.imgur.com/Wwi5hyl.jpeg";
 analyzeImage(imageUrl);
