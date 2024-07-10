@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "name": "my-fullstack-app",
+  "name": "screen-capture-hackathon",
   "builds": [
     { "src": "api/server.js", "use": "@vercel/node" },
     { "src": "client/package.json", "use": "@vercel/static-build" }
