@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const ImageUpload = () => {
+const ImageUpload = ({setResponse}) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [file, setFile] = useState(null);
   const [analysis, setAnalysis] = useState(null);
@@ -36,6 +36,7 @@ const ImageUpload = () => {
           result.error || "An error occurred while uploading the image."
         );
       }
+      setResponse(result.text)
       setAnalysis(result.text);
       console.log(result);
     } catch (error) {
