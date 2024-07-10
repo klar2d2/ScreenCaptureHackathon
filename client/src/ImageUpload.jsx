@@ -36,7 +36,6 @@ const ImageUpload = () => {
           result.error || "An error occurred while uploading the image."
         );
       }
-      setResponse(result.text)
       setAnalysis(result.text);
       console.log(result);
     } catch (error) {
