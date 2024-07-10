@@ -1,15 +1,11 @@
 import React, { useRef, useState } from "react";
-import FormDisplay from "./FormDisplay"; // Make sure to create this file in the same directory
-
 const ImageUpload = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [file, setFile] = useState(null);
   const [analysis, setAnalysis] = useState(null);
-  const [formData, setFormData] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
-
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -21,13 +17,11 @@ const ImageUpload = () => {
       reader.readAsDataURL(file);
     }
   };
-
   const handleUpload = async (event) => {
     event.preventDefault();
     if (!file) return;
     setError(null);
     setAnalysis(null);
-    setFormData(null);
     const formData = new FormData();
     formData.append("image", file);
     try {
@@ -38,75 +32,33 @@ const ImageUpload = () => {
       });
       const result = await response.json();
       if (!response.ok) {
+        setLoading(false);
         throw new Error(
           result.error || "An error occurred while uploading the image."
         );
       }
-      console.log(result.text);
+      setLoading(false);
       setAnalysis(result.text);
-
-      // Parse the analysis text to extract form data
-      const parsedData = parseAnalysisToFormData(result.text);
-      setFormData(parsedData);
-
-      console.log(parsedData);
+      console.log(result);
     } catch (error) {
+      setLoading(false);
       console.error("Error uploading image:", error.message);
       setError(error.message);
-    } finally {
-      setLoading(false);
     }
   };
-
-  const parseAnalysisToFormData = (analysisText) => {
-    try {
-      // Parse the JSON string into an object
-      const data = JSON.parse(analysisText);
-
-      console.log(data, "data");
-
-      // Create a flattened object structure for the form
-      const formData = {
-        name: data.name,
-        address: data.address,
-        underlyingConditionRight: data.right.underlyingCondition,
-        underlyingConditionLeft: data.left.underlyingCondition,
-        supplierRight: data.right.supplier,
-        supplierLeft: data.left.supplier,
-        manufacturerRight: data.right.manufacturer,
-        manufacturerLeft: data.left.manufacturer,
-        styleRight: data.right.style,
-        styleLeft: data.left.style,
-        sphereRight: data.right.sphere,
-        sphereLeft: data.left.sphere,
-        cylinderRight: data.right.cylinder,
-        cylinderLeft: data.left.cylinder,
-        axisRight: data.right.axis,
-        axisLeft: data.left.axis,
-        addRight: data.right.add,
-        addLeft: data.left.add,
-        baseCurveRight: data.right.baseCurve,
-        baseCurveLeft: data.left.baseCurve,
-        diameterRight: data.right.diameter,
-        diameterLeft: data.left.diameter,
-        colorRight: data.right.color,
-        colorLeft: data.left.color,
-        quantityRight: data.right.quantity,
-        quantityLeft: data.left.quantity,
-      };
-
-      // Replace empty strings with 'N/A'
-      Object.keys(formData).forEach((key) => {
-        if (formData[key] === "") {
-          formData[key] = "N/A";
-        }
-      });
-
-      return formData;
-    } catch (error) {
-      console.error("Error parsing analysis data:", error);
-      return null;
-    }
+  const renderAnalysis = () => {
+    if (!analysis) return null;
+    // Split the analysis text into lines
+    const lines = analysis.split(/\d+\./).filter((line) => line.trim() !== "");
+    return (
+      <div style={{ fontSize: "0.7em", textAlign: "left" }}>
+        {lines.map((line, index) => (
+          <p key={index} style={{ margin: "5px 0" }}>
+            <strong>{index + 1}.</strong> {line.trim()}
+          </p>
+        ))}
+      </div>
+    );
   };
   return (
     <div
@@ -178,9 +130,13 @@ const ImageUpload = () => {
           <p>{error}</p>
         </div>
       )}
-      {formData && <FormDisplay data={formData} />}
+      {analysis && (
+        <div style={{ width: "100%", maxWidth: "600px" }}>
+          <h2>Analysis:</h2>
+          {renderAnalysis()}
+        </div>
+      )}
     </div>
   );
 };
-
 export default ImageUpload;
