@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import './App.css';
 import ImageUpload from './ImageUpload.jsx';
 import Form from './Form.jsx';
-import { useState } from 'react';
 
 function App() {
   const [response, setResponse] = useState(null)
