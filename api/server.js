@@ -28,7 +28,7 @@ app.post("/upload", upload.single("image"), async (req, res) => {
     const imageBuffer = fs.readFileSync(req.file.path);
     const base64Image = imageBuffer.toString("base64");
 
-    console.log("Image converted to base64");
+    console.log("Imagee converted to base64");
 
     try {
       console.log("Sending request to OpenAI");
