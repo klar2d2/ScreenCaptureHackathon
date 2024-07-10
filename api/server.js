@@ -16,6 +16,9 @@ const openai = new OpenAI({
 
 const upload = multer({ dest: "upload/" });
 
+const prompt =
+  'Always give your response as an object with this shape, doing the best to fill out the values with what you see in the image. do not include anything but the object. {"name": "","address": "","right": {"underlyingCondition": "","supplier": "","manufacturer": "","style": "","sphere": "","cylinder": "","axis": "","add": "","baseCurve": "","diameter": "","color": "","quantity": ""},"left": {"underlyingCondition": "","supplier": "","manufacturer": "","style": "","sphere": "","cylinder": "","axis": "","add": "","baseCurve": "","diameter": "","color": "","quantity": ""}};';
+
 app.post("/upload", upload.single("image"), async (req, res) => {
   try {
     if (!req.file) {
@@ -28,7 +31,7 @@ app.post("/upload", upload.single("image"), async (req, res) => {
     const imageBuffer = fs.readFileSync(req.file.path);
     const base64Image = imageBuffer.toString("base64");
 
-    console.log("Imagee converted to base64");
+    console.log("Image converted to base64");
 
     try {
       console.log("Sending request to OpenAI");
@@ -40,7 +43,7 @@ app.post("/upload", upload.single("image"), async (req, res) => {
             content: [
               {
                 type: "text",
-                text: "I want all the form fields and values listed out in a numbered list. use this form: 1. Last Name, Maiden: Watts",
+                text: prompt,
               },
               {
                 type: "image_url",
