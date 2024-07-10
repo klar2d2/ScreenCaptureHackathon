@@ -2,64 +2,80 @@ import express from "express";
 import multer from "multer";
 import OpenAI from "openai";
 import dotenv from "dotenv";
-import { encoding_for_model } from "tiktoken";
+import cors from "cors";
+import fs from "fs";
 
 dotenv.config();
-
 const app = express();
-const port = process.env.PORT || 3000;
+app.use(cors());
+const port = process.env.PORT || 3001;
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-const upload = multer({ dest: "uploads/" });
+const upload = multer({ dest: "upload/" });
 
 app.post("/upload", upload.single("image"), async (req, res) => {
   try {
-    const imagePath = req.file.path;
+    if (!req.file) {
+      return res.status(400).json({ error: "No file uploaded" });
+    }
 
-    // Process the image with OCR (Tesseract.js example)
-    const {
-      data: { text },
-    } = await Tesseract.recognize(imagePath, "eng");
+    console.log("File received:", req.file);
 
-    // Count tokens for input
-    const messages = [
-      {
-        role: "user",
-        content: `Extracted text from the image: ${text}\n\nI want all the form fields and values listed out in a numbered list.`,
-      },
-    ];
-    const enc = encoding_for_model("gpt-4o");
-    const inputTokenCount = enc.encode(JSON.stringify(messages)).length;
-    console.log(`Input token count: ${inputTokenCount}`);
+    // Read the file and convert to base64
+    const imageBuffer = fs.readFileSync(req.file.path);
+    const base64Image = imageBuffer.toString("base64");
 
-    const response = await openai.chat.completions.create({
-      model: "gpt-4o",
-      messages: messages,
-      max_tokens: 300,
-    });
+    console.log("Image converted to base64");
 
-    const outputText = response.choices[0].message.content;
-    const outputTokenCount = enc.encode(outputText).length;
-    console.log(`Output token count: ${outputTokenCount}`);
+    try {
+      console.log("Sending request to OpenAI");
+      const response = await openai.chat.completions.create({
+        model: "gpt-4o",
+        messages: [
+          {
+            role: "user",
+            content: [
+              {
+                type: "text",
+                text: "I want all the form fields and values listed out in a numbered list. use this form: 1. Last Name, Maiden: Watts",
+              },
+              {
+                type: "image_url",
+                image_url: {
+                  url: `data:${req.file.mimetype};base64,${base64Image}`,
+                },
+              },
+            ],
+          },
+        ],
+        max_tokens: 300,
+      });
 
-    // Calculate cost
-    const inputCostPerToken = 0.01 / 1000;
-    const outputCostPerToken = 0.03 / 1000;
-    const inputCost = inputTokenCount * inputCostPerToken;
-    const outputCost = outputTokenCount * outputCostPerToken;
-    const totalCost = inputCost + outputCost;
+      console.log("Received response from OpenAI");
+      const outputText = response.choices[0].message.content;
+      console.log("Output text:", outputText);
 
-    console.log(`Total cost: $${totalCost.toFixed(4)}`);
+      // Delete the uploaded file after processing
+      fs.unlinkSync(req.file.path);
+      console.log("Deleted uploaded file");
 
-    res.json({ text: outputText, cost: totalCost });
+      res.json({ text: outputText });
+    } catch (openaiError) {
+      console.error("OpenAI API Error:", openaiError);
+      res.status(500).json({
+        error:
+          openaiError.message ||
+          "An error occurred while processing the image with OpenAI.",
+      });
+    }
   } catch (error) {
-    console.error("Error:", error);
-    res
-      .status(500)
-      .json({ error: "An error occurred while processing the image." });
+    console.error("Server Error:", error);
+    res.status(500).json({
+      error: error.message || "An error occurred while processing the image.",
+    });
   }
 });
 
