@@ -8,7 +8,7 @@ import fs from "fs";
 dotenv.config();
 const app = express();
 app.use(cors());
-const port = process.env.PORT || 3001;
+const port = process.env.VERCEL_URL || 3001;
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
