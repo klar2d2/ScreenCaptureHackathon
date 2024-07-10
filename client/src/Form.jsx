@@ -11,17 +11,17 @@ const Form = ({response}) => {
         postalCode: '',
       });
 
-      useEffect(() => {
-        setFormData({
-            firstName: response.firstName ? response.firstName : '',
-            lastName: response.lastName ? response.lastName : '',
-            email: response.email ? response.email : '',
-            address: response.address ? response.address : '',
-            city: response.city ? response.city : '',
-            state: response.state ? response.state : '',
-            postalCode: response.postalCode ? response.postalCode : '',
-        })
-      },[response])
+      // useEffect(() => {
+      //   setFormData({
+      //       firstName: response.firstName ? response.firstName : '',
+      //       lastName: response.lastName ? response.lastName : '',
+      //       email: response.email ? response.email : '',
+      //       address: response.address ? response.address : '',
+      //       city: response.city ? response.city : '',
+      //       state: response.state ? response.state : '',
+      //       postalCode: response.postalCode ? response.postalCode : '',
+      //   })
+      // },[response])
     
       const handleChange = (e) => {
         const { name, value } = e.target;

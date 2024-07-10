@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const ImageUpload = ({setResponse}) => {
+const ImageUpload = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [file, setFile] = useState(null);
   const [analysis, setAnalysis] = useState(null);

@@ -8,5 +8,9 @@
     "start:client": "cd client && npm start",
     "build": "cd client && npm run build",
     "start:server": "cd api && node server.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "env": "^0.0.2"
   }
 }
