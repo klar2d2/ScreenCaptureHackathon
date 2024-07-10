@@ -1,0 +1,12 @@
+{
+  "name": "screen-capture-hackathon",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "node api/server.js",
+    "start:client": "cd client && npm start",
+    "build": "cd client && npm run build",
+    "start:server": "cd api && node server.js"
+  }
+}
