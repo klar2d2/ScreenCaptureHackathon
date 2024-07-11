@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import FormDisplay from "./FormDisplay"; // Make sure to create this file in the same directory
 
 const ImageUpload = () => {
@@ -9,6 +9,12 @@ const ImageUpload = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
+
+  useEffect(() => {
+    console.log('NODE_ENV:', process.env.NODE_ENV);
+    console.log('REACT_APP_API_URL_LOCAL:', process.env.REACT_APP_API_URL_LOCAL);
+    console.log('REACT_APP_API_URL_PRODUCTION:', process.env.REACT_APP_API_URL_PRODUCTION);
+  }, []);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -32,7 +38,10 @@ const ImageUpload = () => {
     formData.append("image", file);
     try {
       setLoading(true);
-      const response = await fetch("http://localhost:3001/upload", {
+      const apiUrl = process.env.NODE_ENV === 'production'
+      ? process.env.REACT_APP_API_URL_PRODUCTION
+      : process.env.REACT_APP_API_URL_LOCAL;
+      const response = await fetch(apiUrl, {
         method: "POST",
         body: formData,
       });
