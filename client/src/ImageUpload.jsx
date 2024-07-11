@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import FormDisplay from "./FormDisplay";
 
 const ImageUpload = () => {
@@ -9,6 +9,26 @@ const ImageUpload = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
+
+  useEffect(() => {
+    console.log('NODE_ENV:', process.env.NODE_ENV);
+    console.log('REACT_APP_API_URL_LOCAL:', process.env.REACT_APP_API_URL_LOCAL);
+    console.log('REACT_APP_API_URL_PRODUCTION:', process.env.REACT_APP_API_URL_PRODUCTION);
+    console.log('VERCEL', process.env.REACT_APP_VERCEL)
+    console.log('VERCEL_URL', process.env.REACT_APP_VERCEL_URL)
+    console.log('all environment', process.env)
+
+  }, []);
+
+  const getApiBaseUrl = () => {
+    if (process.env.NEXT_PUBLIC_VERCEL_URL) {
+      return `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`;
+    }
+    else if (process.env.NODE_ENV === 'production') {
+      return process.env.REACT_APP_API_URL_PRODUCTION
+    }
+    return process.env.REACT_APP_API_URL_LOCAL;
+  };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -32,7 +52,8 @@ const ImageUpload = () => {
     formData.append("image", file);
     try {
       setLoading(true);
-      const response = await fetch("http://localhost:3001/upload", {
+      const apiUrl = getApiBaseUrl()
+      const response = await fetch(apiUrl, {
         method: "POST",
         body: formData,
       });

@@ -2,13 +2,24 @@
   "version": 2,
   "name": "my-fullstack-app",
   "builds": [
-    { "src": "api/server.js", "use": "@vercel/node" },
+    { "src": "api/upload.js", "use": "@vercel/node" },
     { "src": "client/package.json", "use": "@vercel/static-build",  "config": {
       "distDir": "build"
     } }
   ],
-  "routes": [
-    { "src": "/api/(.*)", "dest": "/api/server.js" },
-    { "src": "/(.*)", "dest": "/client/$1" }
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/upload.js" },
+    { "source": "/(.*)", "destination": "/client/$1" }
+  ],
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        { "key": "Access-Control-Allow-Credentials", "value": "true" },
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Access-Control-Allow-Methods", "value": "GET,OPTIONS,PATCH,DELETE,POST,PUT" },
+        { "key": "Access-Control-Allow-Headers", "value": "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version" }
+      ]
+    }
   ]
 }

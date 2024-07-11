@@ -5,7 +5,8 @@
   "main": "app.js",
   "type": "module",
   "scripts": {
-    "start": "node server.js",
+    "start:local": "node server.js",
+    "start": "node upload.js",
     "app": "node app.js"
   },
   "keywords": [],

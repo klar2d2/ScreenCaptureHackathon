@@ -4,22 +4,35 @@ import OpenAI from "openai";
 import dotenv from "dotenv";
 import cors from "cors";
 import fs from "fs";
+import { promisify } from "util";
 
 dotenv.config();
 const app = express();
+
 app.use(cors());
-const port = process.env.PORT || 3001;
+app.use(express.json())
+// Log any unhandled promise rejections or exceptions 
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('Unhandled Rejection:', reason);
+  });
+  process.on('uncaughtException', (error) => {
+    console.error('Uncaught Exception:', error);
+  });
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-const upload = multer({ dest: "upload/" });
+const upload = multer({ dest: "/tmp/" });
 
 const prompt =
   'Always give your response as an object with this shape, doing the best to fill out the values with what you see in the image. do not include anything but the object.  {"name": "","address": "","right": {"underlyingCondition": "","supplier": "","manufacturer": "","style": "","sphere": "","cylinder": "","axis": "","add": "","baseCurve": "","diameter": "","color": "","quantity": ""},"left": {"underlyingCondition": "","supplier": "","manufacturer": "","style": "","sphere": "","cylinder": "","axis": "","add": "","baseCurve": "","diameter": "","color": "","quantity": ""}}; There is a name and an address. Return blanks as --';
 
-app.post("/upload", upload.single("image"), async (req, res) => {
+  app.get("/test-cors", (req, res) => {
+    res.json({ message: "CORS is working!" });
+  });
+  
+app.post("/api/upload", upload.single("image"), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: "No file uploaded" });
@@ -62,7 +75,8 @@ app.post("/upload", upload.single("image"), async (req, res) => {
       console.log("Output text:", outputText);
 
       // Delete the uploaded file after processing
-      fs.unlinkSync(req.file.path);
+      const unlinkAsync = promisify(fs.unlink);
+      await unlinkAsync(req.file.path);
       console.log("Deleted uploaded file");
 
       res.json({ text: outputText });
@@ -82,6 +96,4 @@ app.post("/upload", upload.single("image"), async (req, res) => {
   }
 });
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+export default app;
