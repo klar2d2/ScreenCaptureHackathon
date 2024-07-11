@@ -4,7 +4,10 @@ const FormDisplay = ({ data }) => {
   console.log("data", data);
   if (!data) return null;
 
-  const topFields = [{ label: "Address", key: "address" }];
+  const topFields = [
+    { label: "Name", key: "name" },
+    { label: "Address", key: "address" },
+  ];
   const sideBySideFields = [
     {
       label: "Underlying Condition",
@@ -24,8 +27,8 @@ const FormDisplay = ({ data }) => {
     { label: "Add", keyRight: "addRight", keyLeft: "addLeft" },
     {
       label: "Base Curve",
-      keyRight: "basecurveRight",
-      keyLeft: "basecurveLeft",
+      keyRight: "baseCurveRight",
+      keyLeft: "baseCurveLeft",
     },
     { label: "Diameter", keyRight: "diameterRight", keyLeft: "diameterLeft" },
     { label: "Color", keyRight: "colorRight", keyLeft: "colorLeft" },
