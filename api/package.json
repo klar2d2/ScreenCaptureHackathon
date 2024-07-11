@@ -5,7 +5,8 @@
   "main": "app.js",
   "type": "module",
   "scripts": {
-    "start": "node server.js",
+    "start:local": "node server.js",
+    "start": "node upload.js",
     "app": "node app.js"
   },
   "keywords": [],
@@ -17,6 +18,7 @@
     "express": "^4.19.2",
     "multer": "^1.4.5-lts.1",
     "openai": "^4.0.0",
+    "path": "^0.12.7",
     "tiktoken": "^1.0.15",
     "uuid": "^10.0.0"
   }
