@@ -51,9 +51,7 @@ const ImageUpload = () => {
     formData.append("image", file);
     try {
       setLoading(true);
-      const apiUrl = process.env.NODE_ENV === 'production'
-      ? process.env.REACT_APP_API_URL_PRODUCTION
-      : process.env.REACT_APP_API_URL_LOCAL;
+      const apiUrl = getApiBaseUrl()
       const response = await fetch(apiUrl, {
         method: "POST",
         body: formData,
