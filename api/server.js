@@ -14,12 +14,12 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-const upload = multer({ dest: "upload/" });
+const server = multer({ dest: "server/" });
 
 const prompt =
   'Always give your response as an object with this shape, doing the best to fill out the values with what you see in the image. do not include anything but the object. {"name": "","address": "","right": {"underlyingCondition": "","supplier": "","manufacturer": "","style": "","sphere": "","cylinder": "","axis": "","add": "","baseCurve": "","diameter": "","color": "","quantity": ""},"left": {"underlyingCondition": "","supplier": "","manufacturer": "","style": "","sphere": "","cylinder": "","axis": "","add": "","baseCurve": "","diameter": "","color": "","quantity": ""}};';
 
-app.post("/upload", upload.single("image"), async (req, res) => {
+app.post("/server", server.single("image"), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: "No file uploaded" });
