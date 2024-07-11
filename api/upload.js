@@ -8,7 +8,15 @@ import { promisify } from "util";
 
 dotenv.config();
 const app = express();
-app.use(cors());
+const corsOptions = {
+    origin: process.env.NODE_ENV === 'production'
+      ? 'https://screen-capture-hackathon.vercel.app'
+      : '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+    optionsSuccessStatus: 204
+  };
+app.use(cors(corsOptions));
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
