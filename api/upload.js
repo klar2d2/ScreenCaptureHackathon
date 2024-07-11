@@ -28,6 +28,10 @@ const upload = multer({ dest: "/tmp/" });
 const prompt =
   'Always give your response as an object with this shape, doing the best to fill out the values with what you see in the image. do not include anything but the object. {"name": "","address": "","right": {"underlyingCondition": "","supplier": "","manufacturer": "","style": "","sphere": "","cylinder": "","axis": "","add": "","baseCurve": "","diameter": "","color": "","quantity": ""},"left": {"underlyingCondition": "","supplier": "","manufacturer": "","style": "","sphere": "","cylinder": "","axis": "","add": "","baseCurve": "","diameter": "","color": "","quantity": ""}};';
 
+  app.get("/test-cors", (req, res) => {
+    res.json({ message: "CORS is working!" });
+  });
+  
 app.post("/api/upload", upload.single("image"), async (req, res) => {
   try {
     if (!req.file) {
