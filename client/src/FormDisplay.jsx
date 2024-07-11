@@ -1,15 +1,24 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
-const FormDisplay = ({ data }) => {
-  console.log("data", data);
-  if (!data) return null;
+const FormDisplay = ({ data, onDataChange }) => {
+  const [formData, setFormData] = useState(data);
 
-  const topFields = [{ label: "Address", key: "address" }];
+  useEffect(() => {
+    setFormData(data);
+  }, [data]);
+
+  if (!formData) return null;
+
+  const topFields = [
+    { label: "Name", key: "name" },
+    { label: "Address", key: "address" },
+  ];
+
   const sideBySideFields = [
     {
       label: "Underlying Condition",
-      keyRight: "underlyingconditionRight",
-      keyLeft: "underlyingconditionLeft",
+      keyRight: "underlyingConditionRight",
+      keyLeft: "underlyingConditionLeft",
     },
     { label: "Supplier", keyRight: "supplierRight", keyLeft: "supplierLeft" },
     {
@@ -24,8 +33,8 @@ const FormDisplay = ({ data }) => {
     { label: "Add", keyRight: "addRight", keyLeft: "addLeft" },
     {
       label: "Base Curve",
-      keyRight: "basecurveRight",
-      keyLeft: "basecurveLeft",
+      keyRight: "baseCurveRight",
+      keyLeft: "baseCurveLeft",
     },
     { label: "Diameter", keyRight: "diameterRight", keyLeft: "diameterLeft" },
     { label: "Color", keyRight: "colorRight", keyLeft: "colorLeft" },
@@ -51,23 +60,48 @@ const FormDisplay = ({ data }) => {
   const headerCellStyle = {
     ...cellStyle,
     fontWeight: "bold",
+    fontSize: "20px",
   };
 
   const subHeaderCellStyle = {
     ...cellStyle,
     fontWeight: "bold",
+    fontSize: "20px",
   };
+
+  const inputStyle = {
+    width: "100%",
+    padding: "5px",
+    border: "none",
+    background: "transparent",
+    fontSize: "20px",
+  };
+
+  const handleInputChange = (key, value) => {
+    const newFormData = { ...formData, [key]: value };
+    setFormData(newFormData);
+    onDataChange(newFormData);
+  };
+
+  const renderEditableCell = (key) => (
+    <input
+      type="text"
+      value={formData[key] || ""}
+      onChange={(e) => handleInputChange(key, e.target.value)}
+      style={inputStyle}
+    />
+  );
 
   return (
     <div style={{ width: "100%", maxWidth: "800px", margin: "20px auto" }}>
-      <h2 style={{ color: "white" }}>Form Data</h2>
+      <h2 style={{ color: "White" }}>Form Data</h2>
       <table style={tableStyle}>
         <tbody>
           {topFields.map((field, index) => (
             <tr key={index}>
               <td style={headerCellStyle}>{field.label}</td>
               <td colSpan="2" style={cellStyle}>
-                {data[field.key] || "N/A"}
+                {renderEditableCell(field.key)}
               </td>
             </tr>
           ))}
@@ -79,8 +113,8 @@ const FormDisplay = ({ data }) => {
           {sideBySideFields.map((field, index) => (
             <tr key={index}>
               <td style={headerCellStyle}>{field.label}</td>
-              <td style={cellStyle}>{data[field.keyRight] || "N/A"}</td>
-              <td style={cellStyle}>{data[field.keyLeft] || "N/A"}</td>
+              <td style={cellStyle}>{renderEditableCell(field.keyRight)}</td>
+              <td style={cellStyle}>{renderEditableCell(field.keyLeft)}</td>
             </tr>
           ))}
         </tbody>
