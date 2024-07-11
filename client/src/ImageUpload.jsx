@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import FormDisplay from "./FormDisplay"; // Make sure to create this file in the same directory
+import FormDisplay from "./FormDisplay";
 
 const ImageUpload = () => {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -108,6 +108,13 @@ const ImageUpload = () => {
       return null;
     }
   };
+
+  const handleFormDataChange = (newFormData) => {
+    setFormData(newFormData);
+    // You can perform additional actions here, like saving to a database
+    console.log("Updated form data:", newFormData);
+  };
+
   return (
     <div
       style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
@@ -178,7 +185,9 @@ const ImageUpload = () => {
           <p>{error}</p>
         </div>
       )}
-      {formData && <FormDisplay data={formData} />}
+      {formData && (
+        <FormDisplay data={formData} onDataChange={handleFormDataChange} />
+      )}
     </div>
   );
 };

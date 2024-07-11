@@ -17,7 +17,7 @@ const openai = new OpenAI({
 const upload = multer({ dest: "upload/" });
 
 const prompt =
-  'Always give your response as an object with this shape, doing the best to fill out the values with what you see in the image. do not include anything but the object. There is a name and an address. {"name": "","address": "","right": {"underlyingCondition": "","supplier": "","manufacturer": "","style": "","sphere": "","cylinder": "","axis": "","add": "","baseCurve": "","diameter": "","color": "","quantity": ""},"left": {"underlyingCondition": "","supplier": "","manufacturer": "","style": "","sphere": "","cylinder": "","axis": "","add": "","baseCurve": "","diameter": "","color": "","quantity": ""}};';
+  'Always give your response as an object with this shape, doing the best to fill out the values with what you see in the image. do not include anything but the object.  {"name": "","address": "","right": {"underlyingCondition": "","supplier": "","manufacturer": "","style": "","sphere": "","cylinder": "","axis": "","add": "","baseCurve": "","diameter": "","color": "","quantity": ""},"left": {"underlyingCondition": "","supplier": "","manufacturer": "","style": "","sphere": "","cylinder": "","axis": "","add": "","baseCurve": "","diameter": "","color": "","quantity": ""}}; There is a name and an address. Return blanks as --';
 
 app.post("/upload", upload.single("image"), async (req, res) => {
   try {
