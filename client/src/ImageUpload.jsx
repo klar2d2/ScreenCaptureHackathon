@@ -14,6 +14,7 @@ const ImageUpload = () => {
     console.log('NODE_ENV:', process.env.NODE_ENV);
     console.log('REACT_APP_API_URL_LOCAL:', process.env.REACT_APP_API_URL_LOCAL);
     console.log('REACT_APP_API_URL_PRODUCTION:', process.env.REACT_APP_API_URL_PRODUCTION);
+    console.log('vercel', process.env.VERCEL_URL)
   }, []);
 
   const getApiBaseUrl = () => {
