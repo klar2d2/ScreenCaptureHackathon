@@ -11,7 +11,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json())
-// Log any unhandled promise rejections or exceptions
+// Log any unhandled promise rejections or exceptions 
 process.on('unhandledRejection', (reason, promise) => {
     console.error('Unhandled Rejection:', reason);
   });
