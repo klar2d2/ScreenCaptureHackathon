@@ -14,8 +14,9 @@ const ImageUpload = () => {
     console.log('NODE_ENV:', process.env.NODE_ENV);
     console.log('REACT_APP_API_URL_LOCAL:', process.env.REACT_APP_API_URL_LOCAL);
     console.log('REACT_APP_API_URL_PRODUCTION:', process.env.REACT_APP_API_URL_PRODUCTION);
-    console.log('VERCEL_URL', process.env.NEXT_PUBLIC_VERCEL_URL)
-    console.log('VERCEL_ENV', process.env.NEXT_PUBLIC_VERCEL_ENV)
+    console.log('VERCEL', process.env.REACT_APP_VERCEL)
+    console.log('VERCEL_URL', process.env.REACT_APP_VERCEL_URL)
+    console.log('VERCEL_ENV', process.env.REACT_APP_VERCEL_ENV)
 
   }, []);
 
