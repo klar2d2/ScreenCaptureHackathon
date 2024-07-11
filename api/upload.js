@@ -17,6 +17,7 @@ const corsOptions = {
     optionsSuccessStatus: 204
   };
 app.use(cors(corsOptions));
+app.use(express.json())
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
