@@ -9,9 +9,19 @@ import { promisify } from "util";
 dotenv.config();
 const app = express();
 const corsOptions = {
-    origin: process.env.NODE_ENV === 'production'
-      ? 'https://screen-capture-hackathon.vercel.app'
-      : '*',
+    origin: function (origin, callback) {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.some(allowedOrigin => {
+          const regex = new RegExp(`^${allowedOrigin.replace('*', '.*')}$`);
+          return regex.test(origin);
+        })) {
+          return callback(null, true);
+        } else {
+          const msg = 'The CORS policy for this site does not allow access from the specified origin.';
+          return callback(new Error(msg), false);
+        }
+      },
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
     optionsSuccessStatus: 204
