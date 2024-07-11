@@ -16,7 +16,7 @@ const ImageUpload = () => {
     console.log('REACT_APP_API_URL_PRODUCTION:', process.env.REACT_APP_API_URL_PRODUCTION);
     console.log('VERCEL', process.env.REACT_APP_VERCEL)
     console.log('VERCEL_URL', process.env.REACT_APP_VERCEL_URL)
-    console.log('VERCEL_ENV', process.env.REACT_APP_VERCEL_ENV)
+    console.log('all environment', process.env)
 
   }, []);
 
