@@ -11,6 +11,13 @@ const app = express();
 
 app.use(cors());
 app.use(express.json())
+// Log any unhandled promise rejections or exceptions
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('Unhandled Rejection:', reason);
+  });
+  process.on('uncaughtException', (error) => {
+    console.error('Uncaught Exception:', error);
+  });
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
