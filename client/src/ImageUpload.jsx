@@ -16,6 +16,16 @@ const ImageUpload = () => {
     console.log('REACT_APP_API_URL_PRODUCTION:', process.env.REACT_APP_API_URL_PRODUCTION);
   }, []);
 
+  const getApiBaseUrl = () => {
+    if (process.env.VERCEL_URL) {
+      return `https://${process.env.VERCEL_URL}`;
+    }
+    else if (process.env.NODE_ENV === 'production') {
+      return process.env.REACT_APP_API_URL_PRODUCTION
+    }
+    return process.env.REACT_APP_API_URL_LOCAL;
+  };
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
