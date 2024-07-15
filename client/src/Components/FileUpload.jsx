@@ -63,6 +63,7 @@ const FileUpload = () => {
         setFiles([...acceptedFiles]);
       };
       reader.readAsDataURL(file);
+      setPrompt("");
     }
   }, []);
 
@@ -196,7 +197,7 @@ const FileUpload = () => {
           style={{ display: "none" }}
         />
         <button className="upload-button" onClick={handleUpload}>
-          Upload
+          UPLOAD
         </button>
       </div>
       <div {...getRootProps({ className: "dropzone" })}>
