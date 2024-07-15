@@ -7,8 +7,8 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <FileUpload />
       </header>
+        <FileUpload />
     </div>
   );
 }
