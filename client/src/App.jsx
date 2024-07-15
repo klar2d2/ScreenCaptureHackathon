@@ -1,5 +1,6 @@
 import "./App.css";
 import ImageUpload from "./ImageUpload.jsx";
+import FileUpload from "./Components/FileUpload.jsx"
 
 
 function App() {
@@ -7,6 +8,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
+        <FileUpload />
         <ImageUpload />
       </header>
     </div>
