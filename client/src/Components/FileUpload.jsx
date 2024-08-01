@@ -1,53 +1,51 @@
-// src/FileUpload.js
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { useDropzone } from 'react-dropzone';
-import './FileUpload.css';
+import React, { useState, useEffect, useCallback, useRef } from "react";
+import { useDropzone } from "react-dropzone";
+import "./FileUpload.css";
+import PendingOrders from "../Pages/PendingOrders/PendingOrders";
 
 const thumbsContainer = {
-  display: 'flex',
-  flexDirection: 'row',
-  flexWrap: 'wrap',
-  marginTop: 16
+  display: "flex",
+  flexDirection: "row",
+  flexWrap: "wrap",
+  marginTop: 16,
 };
 
 const thumb = {
-  display: 'inline-flex',
+  display: "inline-flex",
   borderRadius: 2,
-  border: '1px solid #eaeaea',
+  border: "1px solid #eaeaea",
   marginBottom: 8,
   marginRight: 8,
   width: 100,
   height: 100,
   padding: 4,
-  boxSizing: 'border-box'
+  boxSizing: "border-box",
 };
 
 const thumbInner = {
-  display: 'flex',
+  display: "flex",
   minWidth: 0,
-  overflow: 'hidden'
+  overflow: "hidden",
 };
 
 const img = {
-  display: 'block',
-  width: 'auto',
-  height: '100%'
+  display: "block",
+  width: "auto",
+  height: "100%",
 };
 
 const FileUpload = () => {
-  const [selectedImage, setSelectedImage] = useState(null);
   const [files, setFiles] = useState([]);
-  const [prompt, setPrompt] = useState('Drag and drop files here');
+  const [prompt, setPrompt] = useState("Drag and drop files here");
   const [formData, setFormData] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [analysis, setAnalysis] = useState(null);
   const fileInputRef = useRef(null);
 
   const getApiBaseUrl = () => {
     if (process.env.NEXT_PUBLIC_VERCEL_URL) {
       return `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`;
-    } else if (process.env.NODE_ENV === 'production') {
+    } else if (process.env.NODE_ENV === "production") {
       return process.env.REACT_APP_API_URL_PRODUCTION;
     }
     return process.env.REACT_APP_API_URL_LOCAL;
@@ -58,17 +56,16 @@ const FileUpload = () => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setSelectedImage(reader.result);
         setFiles([...acceptedFiles]);
       };
       reader.readAsDataURL(file);
-      setPrompt('')
+      setPrompt("");
     }
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept: 'image/*'
+    accept: "image/*",
   });
 
   const handleImageChange = (e) => {
@@ -76,7 +73,6 @@ const FileUpload = () => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setSelectedImage(reader.result);
         setFiles([file]);
       };
       reader.readAsDataURL(file);
@@ -87,7 +83,6 @@ const FileUpload = () => {
     event.preventDefault();
     if (!files.length) return;
     setError(null);
-    setAnalysis(null);
     const formData = new FormData();
     formData.append("image", files[0]);
     try {
@@ -99,9 +94,10 @@ const FileUpload = () => {
       });
       const result = await response.json();
       if (!response.ok) {
-        throw new Error(result.error || "An error occurred while uploading the image.");
+        throw new Error(
+          result.error || "An error occurred while uploading the image."
+        );
       }
-      setAnalysis(result.text);
       const parsedData = parseAnalysisToFormData(result.text);
       setFormData(parsedData);
     } catch (error) {
@@ -155,15 +151,15 @@ const FileUpload = () => {
     }
   };
 
-  const handleFormDataChange = (newFormData) => {
-    setFormData(newFormData);
-    console.log("Updated form data:", newFormData);
-  };
-
   const thumbs = files.map((file) => (
     <div style={thumb} key={file.name}>
       <div style={thumbInner}>
-        <img src={URL.createObjectURL(file)} style={img} alt={file.name} onLoad={() => URL.revokeObjectURL(file)} />
+        <img
+          src={URL.createObjectURL(file)}
+          style={img}
+          alt={file.name}
+          onLoad={() => URL.revokeObjectURL(file)}
+        />
       </div>
     </div>
   ));
@@ -172,42 +168,46 @@ const FileUpload = () => {
     return () => files.forEach((file) => URL.revokeObjectURL(file.preview));
   }, [files]);
 
+  if (formData) {
+    return <PendingOrders patientData={formData} />;
+  }
+
   return (
-    <div className="upload-container">
-      <div className="upload-header">
-        <h2>Patient order upload</h2>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleImageChange}
-          ref={fileInputRef}
-          style={{ display: "none" }}
-        />
-        <button className="upload-button" onClick={handleUpload}>UPLOAD</button>
-      </div>
-      <div {...getRootProps({ className: 'dropzone' })}>
-        <input {...getInputProps()} />
-        <div className="dropzone-content">
-          <div className="dropzone-icon">
-            <i className="fas fa-file-upload"></i>
+    <>
+      <header className="App-header"></header>
+      <div className="upload-container">
+        <div className="upload-header">
+          <h2>Patient order upload</h2>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            ref={fileInputRef}
+            style={{ display: "none" }}
+          />
+          <button className="upload-button" onClick={handleUpload}>
+            UPLOAD
+          </button>
+        </div>
+        <div {...getRootProps({ className: "dropzone" })}>
+          <input {...getInputProps()} />
+          <div className="dropzone-content">
+            <div className="dropzone-icon">
+              <i className="fas fa-file-upload"></i>
+            </div>
+            {isDragActive ? <p>Drop the files here...</p> : <p>{prompt}</p>}
           </div>
-          {isDragActive ? (
-            <p>Drop the files here...</p>
-          ) : (
-            <p>{prompt}</p>
+          <aside style={thumbsContainer}>{thumbs}</aside>
+          {loading && <div>Loading...</div>}
+          {error && (
+            <div style={{ color: "red", textAlign: "center" }}>
+              <h2>Error:</h2>
+              <p>{error}</p>
+            </div>
           )}
         </div>
-        <aside style={thumbsContainer}>
-          {thumbs}
-        </aside>
-        {error && (
-          <div style={{ color: "red", textAlign: "center" }}>
-            <h2>Error:</h2>
-            <p>{error}</p>
-          </div>
-        )}
       </div>
-    </div>
+    </>
   );
 };
 
