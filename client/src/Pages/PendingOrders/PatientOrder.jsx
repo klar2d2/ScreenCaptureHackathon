@@ -121,52 +121,107 @@ const PatientOrder = ({ patientData }) => {
           <path
             d="M4.5 9.09977L7.44029 12.375L13.5 5.625"
             stroke="#4FBD9B"
-            stroke-width="2"
+            strokeWidth="2"
           />
         </svg>{" "}
         <span style={nameStyle}>{patientData.name}</span>
       </div>
-
-      <div style={sectionStyle}>
-        <div style={titleStyle}>Right Eye (OD)</div>
-        <div style={productStyle}>
-          <img src={productImage} alt="Product" style={productImageStyle} />
-          <div style={productInfoStyle}>
-            <div style={productNameStyle}>{patientData.productName}</div>
-            <div style={shippingDurationStyle}>
-              {patientData.shippingDuration}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          width: "1200px",
+        }}
+      >
+        <div style={{ width: "48%" }}>
+          <div style={sectionStyle}>
+            <div style={titleStyle}>Right Eye (OD)</div>
+            <div style={productStyle}>
+              <img src={productImage} alt="Product" style={productImageStyle} />
+              <div style={productInfoStyle}>
+                <div style={productNameStyle}>{patientData?.supplierRight}</div>
+                <div style={shippingDurationStyle}>
+                  {patientData?.manufacturerRight}
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
 
-      <div style={sectionStyle}>
-        <div style={prescriptionStyle}>
-          <div style={prescriptionItemStyle}>
-            <div style={propertiesLabelStyle}>BC</div>
-            <div style={propertiesStyle}>{patientData.prescription.BC}</div>
+          <div style={sectionStyle}>
+            <div style={prescriptionStyle}>
+              <div style={prescriptionItemStyle}>
+                <div style={propertiesLabelStyle}>BC</div>
+                <div style={propertiesStyle}>{patientData?.baseCurveRight}</div>
+              </div>
+              <div style={prescriptionItemStyle}>
+                <div style={propertiesLabelStyle}>DIA</div>
+                <div style={propertiesStyle}> {patientData?.diameterRight}</div>
+              </div>
+              <div style={prescriptionItemStyle}>
+                <div style={propertiesLabelStyle}>SPH</div>
+                <div style={propertiesStyle}>{patientData?.sphereRight}</div>
+              </div>
+              <div style={prescriptionItemStyle}>
+                <div style={propertiesLabelStyle}>CYL</div>
+                <div style={propertiesStyle}>
+                  {patientData?.prescription?.CYL
+                    ? patientData?.prescription?.CYL
+                    : "--"}
+                </div>
+              </div>
+            </div>
           </div>
-          <div style={prescriptionItemStyle}>
-            <div style={propertiesLabelStyle}>DIA</div>
-            <div style={propertiesStyle}> {patientData.prescription.DIA}</div>
-          </div>
-          <div style={prescriptionItemStyle}>
-            <div style={propertiesLabelStyle}>PWR</div>
-            <div style={propertiesStyle}>{patientData.prescription.PWR}</div>
-          </div>
-          <div style={prescriptionItemStyle}>
-            <div style={propertiesLabelStyle}>CYL</div>
-            <div style={propertiesStyle}>{patientData.prescription.CYL}</div>
+
+          <div style={sectionStyle}>
+            <div style={titleStyle}>Address</div>
+            <div style={addressStyle}>{patientData?.address}</div>
           </div>
         </div>
-      </div>
 
-      <div style={sectionStyle}>
-        <div style={titleStyle}>Address</div>
-        <div style={addressStyle}>
-          {patientData.address.street}
-          <br />
-          {patientData.address.cityStateZip}
+        <div style={{ width: "48%" }}>
+          <div style={sectionStyle}>
+            <div style={titleStyle}>Left Eye (OS)</div>
+            <div style={productStyle}>
+              <img src={productImage} alt="Product" style={productImageStyle} />
+              <div style={productInfoStyle}>
+                <div style={productNameStyle}>{patientData?.supplierLeft}</div>
+                <div style={shippingDurationStyle}>
+                  {patientData?.manufacturerLeft}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style={sectionStyle}>
+            <div style={prescriptionStyle}>
+              <div style={prescriptionItemStyle}>
+                <div style={propertiesLabelStyle}>BC</div>
+                <div style={propertiesStyle}>{patientData?.baseCurveLeft}</div>
+              </div>
+              <div style={prescriptionItemStyle}>
+                <div style={propertiesLabelStyle}>DIA</div>
+                <div style={propertiesStyle}> {patientData?.diameterLeft}</div>
+              </div>
+              <div style={prescriptionItemStyle}>
+                <div style={propertiesLabelStyle}>SPH</div>
+                <div style={propertiesStyle}>{patientData?.sphereLeft}</div>
+              </div>
+              <div style={prescriptionItemStyle}>
+                <div style={propertiesLabelStyle}>CYL</div>
+                <div style={propertiesStyle}>
+                  {patientData?.prescription?.CYL
+                    ? patientData?.prescription?.CYL
+                    : "--"}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style={sectionStyle}>
+            <div style={titleStyle}>Address</div>
+            <div style={addressStyle}>{patientData?.address}</div>
+          </div>
         </div>
       </div>
     </div>

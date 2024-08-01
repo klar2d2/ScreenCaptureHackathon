@@ -3,7 +3,9 @@ import PatientOrder from "./PatientOrder";
 import backgroundImage from "./background.png";
 import ordersImage from "./orders.png";
 
-const PendingOrders = () => {
+const PendingOrders = (props) => {
+  const { patientData } = props;
+  console.log(patientData);
   const containerStyle = {
     position: "relative",
     width: "100%",
@@ -43,22 +45,51 @@ const PendingOrders = () => {
     height: "570px",
   };
 
-  const patientData = {
-    name: "Zain Workman",
-    productImage: "./product-image.png", // You'll need to add this image
-    productName: "DAILIES® AquaComfort Plus® Multifocal",
-    shippingDuration: "12 months shipped",
-    prescription: {
-      BC: "8.6",
-      DIA: "14.2",
-      PWR: "-20.00",
-      CYL: "+1.25",
-    },
-    address: {
-      street: "4993 Street St.",
-      cityStateZip: "Fort Worth, TX 76063",
-    },
-  };
+  // {
+  //   "name": "Moira Rose",
+  //   "address": "13774 Northwest Freeway Sometown, CA 95630",
+  //   "underlyingConditionRight": "--",
+  //   "underlyingConditionLeft": "--",
+  //   "supplierRight": "Eyefinity - ABB",
+  //   "supplierLeft": "Eyefinity - ABB",
+  //   "manufacturerRight": "Alcon Laboratories Inc",
+  //   "manufacturerLeft": "Alcon Laboratories Inc",
+  //   "styleRight": "Precision1 90 Pack",
+  //   "styleLeft": "Precision1 90 Pack",
+  //   "sphereRight": "-5.50",
+  //   "sphereLeft": "-5.50",
+  //   "cylinderRight": "--",
+  //   "cylinderLeft": "--",
+  //   "axisRight": "--",
+  //   "axisLeft": "--",
+  //   "addRight": "--",
+  //   "addLeft": "--",
+  //   "baseCurveRight": "8.3",
+  //   "baseCurveLeft": "8.3",
+  //   "diameterRight": "14.2",
+  //   "diameterLeft": "14.2",
+  //   "colorRight": "Clear",
+  //   "colorLeft": "Clear",
+  //   "quantityRight": "4",
+  //   "quantityLeft": "4"
+  // }
+
+  // const patientData = {
+  //   name: "Zain Workman",
+  //   productImage: "./product-image.png", // You'll need to add this image
+  //   productName: "DAILIES® AquaComfort Plus® Multifocal",
+  //   shippingDuration: "12 months shipped",
+  //   prescription: {
+  //     BC: "8.6",
+  //     DIA: "14.2",
+  //     PWR: "-20.00",
+  //     CYL: "+1.25",
+  //   },
+  //   address: {
+  //     street: "4993 Street St.",
+  //     cityStateZip: "Fort Worth, TX 76063",
+  //   },
+  // };
 
   return (
     <div style={containerStyle}>
