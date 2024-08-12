@@ -2,6 +2,7 @@ import OpenAI from "openai";
 import dotenv from "dotenv";
 import { encoding_for_model } from "tiktoken";
 
+
 dotenv.config();
 
 const openai = new OpenAI({

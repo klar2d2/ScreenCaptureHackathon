@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useDropzone } from "react-dropzone";
 import "./FileUpload.css";
 import PendingOrders from "../Pages/PendingOrders/PendingOrders";
+import ScreenCaptureComponent from "./ScreenCapture";
 
 const thumbsContainer = {
   display: "flex",
@@ -185,6 +186,7 @@ const FileUpload = () => {
             ref={fileInputRef}
             style={{ display: "none" }}
           />
+          <ScreenCaptureComponent/>
           <button className="upload-button" onClick={handleUpload}>
             UPLOAD
           </button>
