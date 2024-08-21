@@ -42,6 +42,52 @@ const FileUpload = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
+  const [captureUrl, setCaptureUrl] = useState(null);
+  const [isSharing, setIsSharing] = useState(false);
+  const videoRef = useRef(null);
+  const streamRef = useRef(null);
+
+  const captureScreenshot = (video = null) => {
+    const canvas = document.createElement('canvas');
+    const source = video || videoRef.current;
+    
+    if (!source) {
+      setError('No video source available for screenshot.');
+      return;
+    }
+  
+    canvas.width = source.videoWidth;
+    canvas.height = source.videoHeight;
+    canvas.getContext('2d').drawImage(source, 0, 0, canvas.width, canvas.height);
+    
+    canvas.toBlob((blob) => {
+      const file = new File([blob], "screenshot.png", { type: "image/png" });
+      setFiles([file]);
+      setCaptureUrl(URL.createObjectURL(file));
+    }, 'image/png');
+  };
+
+  const handleCapture = async () => {
+    if (isSharing) {
+      captureScreenshot();
+    } else {
+      try {
+        const stream = await navigator.mediaDevices.getDisplayMedia({ video: true });
+        const video = document.createElement('video');
+        
+        video.srcObject = stream;
+        video.onloadedmetadata = () => {
+          video.play();
+          captureScreenshot(video);
+          stream.getTracks().forEach(track => track.stop());
+        };
+      } catch (err) {
+        setError('Failed to capture screen. Please make sure you have granted the necessary permissions.');
+        console.error('Error capturing screen:', err);
+      }
+    }
+  };
+
 
   const getApiBaseUrl = () => {
     if (process.env.NEXT_PUBLIC_VERCEL_URL) {
@@ -55,11 +101,8 @@ const FileUpload = () => {
   const onDrop = useCallback((acceptedFiles) => {
     const file = acceptedFiles[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFiles([...acceptedFiles]);
-      };
-      reader.readAsDataURL(file);
+      setFiles([file]);
+      setCaptureUrl(null);
       setPrompt("");
     }
   }, []);
@@ -152,7 +195,7 @@ const FileUpload = () => {
     }
   };
 
-  const thumbs = files.map((file) => (
+  const thumbs = files.length > 0 ? files.map((file) => (
     <div style={thumb} key={file.name}>
       <div style={thumbInner}>
         <img
@@ -163,7 +206,17 @@ const FileUpload = () => {
         />
       </div>
     </div>
-  ));
+  )) : captureUrl ? (
+    <div style={thumb}>
+      <div style={thumbInner}>
+        <img
+          src={captureUrl}
+          style={img}
+          alt="Captured screenshot"
+        />
+      </div>
+    </div>
+  ) : null;
 
   useEffect(() => {
     return () => files.forEach((file) => URL.revokeObjectURL(file.preview));
@@ -186,28 +239,35 @@ const FileUpload = () => {
             ref={fileInputRef}
             style={{ display: "none" }}
           />
-          <ScreenCaptureComponent/>
+          <button className="upload-button" onClick={handleCapture}>
+            TAKE SCREENSHOT
+          </button>
           <button className="upload-button" onClick={handleUpload}>
             UPLOAD
           </button>
         </div>
         <div {...getRootProps({ className: "dropzone" })}>
-          <input {...getInputProps()} />
-          <div className="dropzone-content">
-            <div className="dropzone-icon">
-              <i className="fas fa-file-upload"></i>
-            </div>
-            {isDragActive ? <p>Drop the files here...</p> : <p>{prompt}</p>}
-          </div>
-          <aside style={thumbsContainer}>{thumbs}</aside>
-          {loading && <div>Loading...</div>}
-          {error && (
-            <div style={{ color: "red", textAlign: "center" }}>
-              <h2>Error:</h2>
-              <p>{error}</p>
-            </div>
-          )}
+  <input {...getInputProps()} />
+  <div className="dropzone-content">
+    {files.length > 0 || captureUrl ? (
+      <aside style={thumbsContainer}>{thumbs}</aside>
+    ) : (
+      <>
+        <div className="dropzone-icon">
+          <i className="fas fa-file-upload"></i>
         </div>
+        {isDragActive ? <p>Drop the files here...</p> : <p>{prompt}</p>}
+      </>
+    )}
+  </div>
+  {loading && <div>Loading...</div>}
+  {error && (
+    <div style={{ color: "red", textAlign: "center" }}>
+      <h2>Error:</h2>
+      <p>{error}</p>
+    </div>
+  )}
+</div>
       </div>
     </>
   );

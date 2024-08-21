@@ -16,6 +16,23 @@ const ScreenCaptureAndShareComponent = () => {
   const streamRef = useRef(null);
 
   const captureScreenshot = (video = null) => {
+    const displayMediaOptions = {
+        video: {
+          displaySurface: "window",
+          cursor: "never",
+          logicalSurface: true
+        },
+        preferCurrentTab: true,
+        selfBrowserSurface: "include",
+        systemAudio: "exclude"
+      };
+
+
+    const stream = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
+    const track = stream.getVideoTracks()[0];
+    
+    const imageCapture = new ImageCapture(track);
+    const bitmap = await imageCapture.grabFrame();
     const canvas = document.createElement('canvas');
     const source = video || videoRef.current;
     

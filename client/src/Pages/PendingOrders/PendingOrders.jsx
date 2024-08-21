@@ -1,6 +1,6 @@
 import React from "react";
 import PatientOrder from "./PatientOrder";
-import backgroundImage from "./background.png";
+import backgroundImage from "./bg.jpg";
 import ordersImage from "./orders.png";
 
 const PendingOrders = (props) => {
@@ -17,25 +17,29 @@ const PendingOrders = (props) => {
   };
 
   const imageStyle = {
-    width: "1440px",
-    height: "auto",
+    position: 'absolute',
+    top: '0px',
+    right: '0px',
+    width: "100%",
+    backroundSize: 'cover',
+    height: '120vh',
+    filter: 'brightness(50%)',
   };
 
   const ordersImageStyle = {
-    ...imageStyle,
     width: "1193px",
+    height: "auto",
     position: "absolute",
+    justifyContent: 'center',
+    alignItems: 'center',
     zIndex: 1,
   };
 
   const whiteOverlayStyle = {
-    position: "absolute",
     width: "972px",
-    height: "579px",
-    top: "543px",
-    left: "638px",
-    transform: "translate(-50%, -50%)",
+    height: "500px",
     backgroundColor: "#FAFAFA",
+    marginTop: '120px',
     zIndex: 2,
   };
 

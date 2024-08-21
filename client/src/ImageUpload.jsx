@@ -1,14 +1,76 @@
 import React, { useRef, useState } from "react";
 import FormDisplay from "./FormDisplay";
+import CameraAltIcon from '@mui/icons-material/CameraAlt';
 
 const ImageUpload = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [file, setFile] = useState(null);
   const [analysis, setAnalysis] = useState(null);
   const [formData, setFormData] = useState(null);
-  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
+  const [captureUrl, setCaptureUrl] = useState(null);
+  const [error, setError] = useState(null);
+  const [isSharing, setIsSharing] = useState(false);
+  const videoRef = useRef(null);
+  const streamRef = useRef(null);
+
+  const captureScreenshot = (video = null) => {
+    const canvas = document.createElement('canvas');
+    const source = video || videoRef.current;
+    
+    if (!source) {
+      setError('No video source available for screenshot.');
+      return;
+    }
+
+    canvas.width = source.videoWidth;
+    canvas.height = source.videoHeight;
+    canvas.getContext('2d').drawImage(source, 0, 0, canvas.width, canvas.height);
+    const url = canvas.toDataURL();
+    setCaptureUrl(url);
+  };
+
+  const handleCapture = async () => {
+    if (isSharing) {
+      captureScreenshot();
+    } else {
+      try {
+        const stream = await navigator.mediaDevices.getDisplayMedia({ video: true });
+        const video = document.createElement('video');
+        
+        video.srcObject = stream;
+        video.onloadedmetadata = () => {
+          video.play();
+          captureScreenshot(video);
+          stream.getTracks().forEach(track => track.stop());
+        };
+      } catch (err) {
+        setError('Failed to capture screen. Please make sure you have granted the necessary permissions.');
+        console.error('Error capturing screen:', err);
+      }
+    }
+  };
+
+  const handleShare = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getDisplayMedia({ video: true });
+      videoRef.current.srcObject = stream;
+      streamRef.current = stream;
+      setIsSharing(true);
+    } catch (err) {
+      setError('Failed to start screen sharing. Please make sure you have granted the necessary permissions.');
+      console.error('Error starting screen share:', err);
+    }
+  };
+
+  const handleStopSharing = () => {
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach(track => track.stop());
+      setIsSharing(false);
+      setCaptureUrl(null);
+    }
+  };
 
   const getApiBaseUrl = () => {
     if (process.env.NEXT_PUBLIC_VERCEL_URL) {
@@ -171,6 +233,13 @@ const ImageUpload = () => {
               margin: "10px 0",
             }}
           />
+          <button 
+          variant="contained" 
+          onClick={handleCapture} 
+          startIcon={<CameraAltIcon />}
+        >
+          Take Screenshot
+        </button>
           {!loading ? (
             <button
               onClick={handleUpload}
