@@ -1,38 +1,118 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useDropzone } from "react-dropzone";
-import "./FileUpload.css";
-import PendingOrders from "../Pages/PendingOrders/PendingOrders";
+import styled from "styled-components";
+import PendingOrders from "../PendingOrders/PendingOrders";
+import backgroundImage from "./dummyBackground.jpg";
 
-const thumbsContainer = {
-  display: "flex",
-  flexDirection: "row",
-  flexWrap: "wrap",
-  marginTop: 16,
-};
+const UploadContainer = styled.div`
+  width: 93%;
+  margin: 0 auto;
+  padding: 20px;
+  border-radius: 16px;
+  background: var(--textWhite, #fff);
+  box-shadow: 0px 3px 0px 0px #69aeff;
+  background-color: #f9f9f9;
+`;
 
-const thumb = {
-  display: "inline-flex",
-  borderRadius: 2,
-  border: "1px solid #eaeaea",
-  marginBottom: 8,
-  marginRight: 8,
-  width: 100,
-  height: 100,
-  padding: 4,
-  boxSizing: "border-box",
-};
+const UploadHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+`;
 
-const thumbInner = {
-  display: "flex",
-  minWidth: 0,
-  overflow: "hidden",
-};
+const UploadButton = styled.button`
+  padding: 8px 16px;
+  width: 220px;
+  height: 40px;
+  border: 1px solid #555;
+  border-radius: 20px;
+  background-color: #fff;
+  cursor: pointer;
+`;
 
-const img = {
-  display: "block",
-  width: "auto",
-  height: "100%",
-};
+const StyledDropzone = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  border: 2px dashed #007bff;
+  border-radius: 8px;
+  background-color: #fff;
+  text-align: center;
+`;
+
+const DropzoneContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const DropzoneIcon = styled.div`
+  font-size: 48px;
+  margin-bottom: 10px;
+  color: #ccc;
+`;
+
+const DropzoneText = styled.p`
+  color: #777;
+  font-size: 16px;
+`;
+
+const AppHeader = styled.header`
+  background-image: url(${backgroundImage});
+  background-size: cover;
+  min-height: 25vh;
+  max-height: 25vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: sans-serif;
+  font-size: calc(10px + 2vmin);
+  color: #2f3641;
+`;
+
+const ThumbsContainer = styled.aside`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-top: 16px;
+`;
+
+const Thumb = styled.div`
+  display: inline-flex;
+  border-radius: 2px;
+  border: 1px solid #eaeaea;
+  margin-bottom: 8px;
+  margin-right: 8px;
+  width: 100px;
+  height: 100px;
+  padding: 4px;
+  box-sizing: border-box;
+`;
+
+const ThumbInner = styled.div`
+  display: flex;
+  min-width: 0;
+  overflow: hidden;
+`;
+
+const ThumbImg = styled.img`
+  display: block;
+  width: auto;
+  height: 100%;
+`;
+
+const ErrorContainer = styled.div`
+  color: red;
+  text-align: center;
+`;
+
+const HiddenInput = styled.input`
+  display: none;
+`;
 
 const FileUpload = () => {
   const [files, setFiles] = useState([]);
@@ -152,16 +232,15 @@ const FileUpload = () => {
   };
 
   const thumbs = files.map((file) => (
-    <div style={thumb} key={file.name}>
-      <div style={thumbInner}>
-        <img
+    <Thumb key={file.name}>
+      <ThumbInner>
+        <ThumbImg
           src={URL.createObjectURL(file)}
-          style={img}
           alt={file.name}
           onLoad={() => URL.revokeObjectURL(file)}
         />
-      </div>
-    </div>
+      </ThumbInner>
+    </Thumb>
   ));
 
   useEffect(() => {
@@ -174,39 +253,40 @@ const FileUpload = () => {
 
   return (
     <>
-      <header className="App-header"></header>
-      <div className="upload-container">
-        <div className="upload-header">
+      <AppHeader></AppHeader>
+      <UploadContainer>
+        <UploadHeader>
           <h2>Patient order upload</h2>
-          <input
+          <HiddenInput
             type="file"
             accept="image/*"
             onChange={handleImageChange}
             ref={fileInputRef}
-            style={{ display: "none" }}
           />
-          <button className="upload-button" onClick={handleUpload}>
-            UPLOAD
-          </button>
-        </div>
-        <div {...getRootProps({ className: "dropzone" })}>
+          <UploadButton onClick={handleUpload}>UPLOAD</UploadButton>
+        </UploadHeader>
+        <StyledDropzone {...getRootProps()}>
           <input {...getInputProps()} />
-          <div className="dropzone-content">
-            <div className="dropzone-icon">
+          <DropzoneContent>
+            <DropzoneIcon>
               <i className="fas fa-file-upload"></i>
-            </div>
-            {isDragActive ? <p>Drop the files here...</p> : <p>{prompt}</p>}
-          </div>
-          <aside style={thumbsContainer}>{thumbs}</aside>
+            </DropzoneIcon>
+            {isDragActive ? (
+              <DropzoneText>Drop the files here...</DropzoneText>
+            ) : (
+              <DropzoneText>{prompt}</DropzoneText>
+            )}
+          </DropzoneContent>
+          <ThumbsContainer>{thumbs}</ThumbsContainer>
           {loading && <div>Loading...</div>}
           {error && (
-            <div style={{ color: "red", textAlign: "center" }}>
+            <ErrorContainer>
               <h2>Error:</h2>
               <p>{error}</p>
-            </div>
+            </ErrorContainer>
           )}
-        </div>
-      </div>
+        </StyledDropzone>
+      </UploadContainer>
     </>
   );
 };

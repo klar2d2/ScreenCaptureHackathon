@@ -1,5 +1,5 @@
 import React from "react";
-import productImage from "./product.png";
+import productImage from "./images/product.png";
 
 const PatientOrder = ({ patientData }) => {
   const containerStyle = {

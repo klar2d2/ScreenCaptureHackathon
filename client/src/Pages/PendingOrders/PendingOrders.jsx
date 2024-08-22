@@ -1,11 +1,12 @@
 import React from "react";
 import PatientOrder from "./PatientOrder";
-import backgroundImage from "./background.png";
-import ordersImage from "./orders.png";
+import backgroundImage from "./images/dummyBackground.png";
+import ordersImage from "./images/orders.png";
 
 const PendingOrders = (props) => {
   const { patientData } = props;
   console.log(patientData);
+
   const containerStyle = {
     position: "relative",
     width: "100%",
@@ -37,66 +38,64 @@ const PendingOrders = (props) => {
     transform: "translate(-50%, -50%)",
     backgroundColor: "#FAFAFA",
     zIndex: 2,
+    borderRadius: "10px",
+    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+    padding: "20px",
   };
 
-  const realComponentStyle = {
-    zIndex: 3,
-    width: "1015px",
-    height: "570px",
+  const headerStyle = {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: "20px",
   };
 
-  // {
-  //   "name": "Moira Rose",
-  //   "address": "13774 Northwest Freeway Sometown, CA 95630",
-  //   "underlyingConditionRight": "--",
-  //   "underlyingConditionLeft": "--",
-  //   "supplierRight": "Eyefinity - ABB",
-  //   "supplierLeft": "Eyefinity - ABB",
-  //   "manufacturerRight": "Alcon Laboratories Inc",
-  //   "manufacturerLeft": "Alcon Laboratories Inc",
-  //   "styleRight": "Precision1 90 Pack",
-  //   "styleLeft": "Precision1 90 Pack",
-  //   "sphereRight": "-5.50",
-  //   "sphereLeft": "-5.50",
-  //   "cylinderRight": "--",
-  //   "cylinderLeft": "--",
-  //   "axisRight": "--",
-  //   "axisLeft": "--",
-  //   "addRight": "--",
-  //   "addLeft": "--",
-  //   "baseCurveRight": "8.3",
-  //   "baseCurveLeft": "8.3",
-  //   "diameterRight": "14.2",
-  //   "diameterLeft": "14.2",
-  //   "colorRight": "Clear",
-  //   "colorLeft": "Clear",
-  //   "quantityRight": "4",
-  //   "quantityLeft": "4"
-  // }
+  const titleStyle = {
+    fontSize: "24px",
+    fontWeight: "bold",
+  };
 
-  // const patientData = {
-  //   name: "Zain Workman",
-  //   productImage: "./product-image.png", // You'll need to add this image
-  //   productName: "DAILIES® AquaComfort Plus® Multifocal",
-  //   shippingDuration: "12 months shipped",
-  //   prescription: {
-  //     BC: "8.6",
-  //     DIA: "14.2",
-  //     PWR: "-20.00",
-  //     CYL: "+1.25",
-  //   },
-  //   address: {
-  //     street: "4993 Street St.",
-  //     cityStateZip: "Fort Worth, TX 76063",
-  //   },
-  // };
+  const searchBarStyle = {
+    flexGrow: 1,
+    margin: "0 20px",
+  };
+
+  const inputStyle = {
+    width: "100%",
+    padding: "10px",
+    border: "1px solid #ccc",
+    borderRadius: "5px",
+  };
+
+  const buttonStyle = {
+    backgroundColor: "#FFD700",
+    border: "none",
+    padding: "10px 20px",
+    borderRadius: "5px",
+    fontWeight: "bold",
+    cursor: "pointer",
+  };
+
+  const contentStyle = {
+    backgroundColor: "white",
+    height: "calc(100% - 60px)",
+    borderRadius: "5px",
+  };
 
   return (
     <div style={containerStyle}>
       <img src={backgroundImage} alt="Background" style={imageStyle} />
-      <img src={ordersImage} alt="Orders" style={ordersImageStyle} />
+      {/* <img src={ordersImage} alt="Orders" style={ordersImageStyle} /> */}
       <div style={whiteOverlayStyle}>
-        <div style={realComponentStyle}>
+        <div style={headerStyle}>
+          <h1 style={titleStyle}>Pending orders (6)</h1>
+          <div style={searchBarStyle}>
+            <input type="text" placeholder="SEARCH" style={inputStyle} />
+          </div>
+          <button style={buttonStyle}>CREATE ORDERS</button>
+        </div>
+        <div style={contentStyle}>
+          {/* This area would typically contain a list of pending orders */}
           <PatientOrder patientData={patientData} />
         </div>
       </div>
